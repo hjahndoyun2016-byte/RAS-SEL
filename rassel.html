@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 인성 덕목 월드컵 | SEL+RAS ON 성남교육</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Jua, Do Hyeon, Gaegu, Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gaegu:wght@700&family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --font-display: 'Jua', 'Do Hyeon', sans-serif;
+      --font-broadcast: 'Do Hyeon', sans-serif;
+      --font-hand: 'Gaegu', cursive;
+      --font-body: 'Noto Sans KR', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      background: radial-gradient(circle at 20% 20%, #fff5f8 0%, #f0f7ff 48%, #fdf8ee 100%);
+      color: #1e293b;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .font-jua { font-family: var(--font-display); }
+    .font-dohyeon { font-family: var(--font-broadcast); }
+    .font-gaegu { font-family: var(--font-hand); }
+
+    /* Mobile-friendly touch targets */
+    button, [role="button"] {
+      min-height: 48px;
+      touch-action: manipulation;
+    }
+
+    /* Broadcast Live Pulse */
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+    .live-dot {
+      animation: livePulse 1.2s infinite ease-in-out;
+    }
+
+    /* Running Broadcast Ticker */
+    @keyframes tickerScroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerScroll 30s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* VS Badge Float & Glow */
+    @keyframes vsPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(-3deg); box-shadow: 0 0 25px rgba(251, 191, 36, 0.7), 0 0 50px rgba(244, 63, 94, 0.45); }
+      50% { transform: translate(-50%, -50%) scale(1.08) rotate(3deg); box-shadow: 0 0 38px rgba(251, 191, 36, 0.95), 0 0 70px rgba(59, 130, 246, 0.65); }
+    }
+    .vs-emblem {
+      animation: vsPulse 2s infinite ease-in-out;
+    }
+
+    /* Candidate Card Animations */
+    .candidate-card {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    @media (hover: hover) {
+      .candidate-card:hover {
+        transform: translateY(-5px) scale(1.012);
+      }
+    }
+    .candidate-card:active {
+      transform: scale(0.985);
+    }
+
+    @keyframes stampSlam {
+      0% { opacity: 0; transform: scale(2.2) rotate(-18deg); }
+      60% { opacity: 1; transform: scale(0.94) rotate(-8deg); }
+      80% { transform: scale(1.03) rotate(-10deg); }
+      100% { opacity: 1; transform: scale(1) rotate(-10deg); }
+    }
+    .election-stamp {
+      animation: stampSlam 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Rotating Sunburst Rays for Finale Seongnam RAS Emblem */
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .sunburst-rays {
+      animation: spinSlow 18s linear infinite;
+    }
+
+    /* Sparkling Twinkle */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; transform: scale(0.75) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.25) rotate(20deg); }
+    }
+    .sparkle-star {
+      animation: twinkle 1.6s infinite ease-in-out;
+    }
+
+    /* Gentle Floating Emblem */
+    @keyframes floatBob {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+    .float-bob {
+      animation: floatBob 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-[100dvh] relative selection:bg-pink-200 selection:text-slate-900">
+
+  <!-- Full-Screen Celebration Canvas (Fireworks + Magpies + Azaleas + Ginkgo Leaves) -->
+  <canvas id="celebrationCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- TOP ELECTION BROADCAST HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md text-white border-b-4 border-amber-400 shadow-lg pt-[env(safe-area-inset-top,0px)]">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center justify-between gap-2">
+      <!-- Left: Broadcast Logo -->
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div class="flex items-center gap-1.5 bg-rose-600 px-2.5 py-1 rounded-full text-[11px] sm:text-sm font-black tracking-wider shadow-inner shrink-0">
+          <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white live-dot inline-block"></span>
+          <span>LIVE</span>
+        </div>
+        <div class="truncate">
+          <div class="flex items-center gap-2">
+            <span class="font-dohyeon text-sm sm:text-xl md:text-2xl tracking-tight text-amber-300 truncate">
+              2026 인성 덕목 월드컵
+            </span>
+            <span class="hidden md:inline-block bg-sky-500/20 border border-sky-400/50 text-sky-200 text-xs px-2.5 py-0.5 rounded-full font-bold shrink-0">
+              SEL+RAS ON 성남교육
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-300 truncate sm:block">
+            중등 인성교육 지원단 특별 생방송 · 17가지 마음의 빛 월드컵
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Audio & Restart Controls -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <button id="bgmToggleBtn" type="button"
+          class="flex items-center justify-center gap-1 bg-slate-800 hover:bg-slate-700 active:scale-95 text-amber-300 border border-amber-400/50 px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition shadow">
+          <span id="bgmIcon">🔊</span>
+          <span id="bgmLabel">소리 켜짐</span>
+        </button>
+        <button id="restartTopBtn" type="button"
+          class="flex items-center justify-center gap-1 bg-rose-500/90 hover:bg-rose-500 active:scale-95 text-white px-2.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition shadow">
+          <span>🔄</span>
+          <span class="hidden sm:inline">처음으로</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APPLICATION CONTAINER -->
+  <main class="flex-1 flex flex-col justify-center items-center w-full max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-6 pb-16 relative z-10">
+
+    <!-- ==================== 1. INTRO / START SCREEN ==================== -->
+    <section id="introScreen" class="w-full max-w-4xl mx-auto text-center">
+      <div class="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-4 border-pink-200 p-5 sm:p-10 relative overflow-hidden">
+        <!-- Decorative Corner Pastel Pills -->
+        <div class="absolute -top-10 -left-10 w-36 h-36 bg-pink-200/50 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-sky-200/60 rounded-full blur-2xl pointer-events-none"></div>
+
+        <!-- Top Mini Emblem Badge -->
+        <div class="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-pink-100 via-amber-100 to-sky-100 border-2 border-amber-300 px-3.5 py-1.5 rounded-full shadow-sm mb-3 sm:mb-4">
+          <span class="text-sm sm:text-base">🌸</span>
+          <span class="font-jua text-xs sm:text-base text-slate-800">SEL+RAS ON 성남교육 · 중등 인성교육 지원단</span>
+          <span class="text-sm sm:text-base">🍂</span>
+        </div>
+
+        <h1 class="font-jua text-3xl sm:text-5xl md:text-6xl text-slate-900 leading-tight mb-2 sm:mb-3 drop-shadow-sm break-keep">
+          내 마음을 비추는<br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-amber-500 to-sky-600">
+            17가지 인성 덕목 월드컵
+          </span>
+        </h1>
+
+        <p class="font-dohyeon text-base sm:text-2xl text-slate-600 mb-5 sm:mb-6">
+          🎙️ 대통령 선거방송 스타일 실시간 마음 월드컵
+        </p>
+
+        <!-- Preview Mini Badges Strip -->
+        <div id="introBadgeStrip" class="flex flex-wrap justify-center gap-1.5 sm:gap-2.5 mb-6 max-w-2xl mx-auto">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Election Rules Card (Korean Grammar & Natural Phrasing Verified) -->
+        <div class="bg-slate-50/95 border-2 border-slate-200 rounded-2xl p-4 sm:p-6 text-left max-w-2xl mx-auto mb-6 sm:mb-8 shadow-inner">
+          <h2 class="font-jua text-base sm:text-xl text-slate-800 mb-2.5 flex items-center gap-2">
+            <span class="bg-amber-400 text-slate-900 px-2.5 py-0.5 rounded-lg text-xs sm:text-sm font-dohyeon">월드컵 안내</span>
+            <span>어떻게 진행되나요?</span>
+          </h2>
+          <ul class="space-y-2 text-xs sm:text-base text-slate-700 leading-relaxed break-keep">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-500 font-bold shrink-0">✔</span>
+              <span><strong>열일곱 가지 모든 인성 덕목</strong>이 무작위 대진표에 배정되어, 한 덕목도 빠짐없이 공정하게 경합합니다.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-sky-500 font-bold shrink-0">✔</span>
+              <span>두 후보의 <strong>인성 타투 엠블렘</strong>과 <strong>덕목 개념</strong>을 비교한 뒤, 지금 나에게 가장 필요한 덕목에 투표해 주세요.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-500 font-bold shrink-0">✔</span>
+              <span>최종 우승한 덕목이 결정되면 <strong>빛나는 성남 RAS 엠블렘</strong>과 함께 <strong>심리학 기반 마음 해설</strong>이 공개됩니다.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Start Button -->
+        <button id="startTournamentBtn" type="button"
+          class="w-full sm:w-auto group relative inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-jua text-xl sm:text-3xl px-7 sm:px-12 py-4 sm:py-5 rounded-full shadow-xl hover:shadow-2xl transform active:scale-95 transition-all border-4 border-white">
+          <span>🗳️ 인성 월드컵 생중계 입장하기</span>
+          <span class="group-hover:translate-x-1 transition-transform">▶</span>
+        </button>
+        <p class="text-[11px] sm:text-sm text-slate-500 mt-2.5 break-keep">
+          * 화면을 터치하거나 입장 버튼을 누르면 생방송 배경음악이 자동으로 재생됩니다 🎵
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== 2. TOURNAMENT ARENA SCREEN ==================== -->
+    <section id="arenaScreen" class="hidden w-full max-w-6xl mx-auto">
+      <!-- Broadcast Scoreboard / Round Status Bar -->
+      <div class="bg-slate-900 text-white rounded-2xl sm:rounded-3xl p-3 sm:p-5 mb-3 sm:mb-6 shadow-xl border-2 border-slate-700">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <div class="flex items-center gap-2">
+            <span id="roundBadge" class="bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 font-dohyeon text-sm sm:text-xl px-3 py-0.5 sm:py-1 rounded-xl shadow">
+              예선 플레이오프
+            </span>
+            <span id="matchCounterText" class="font-dohyeon text-base sm:text-2xl text-sky-300">
+              제1매치 <span class="text-slate-400 text-xs sm:text-lg">/ 총 16매치</span>
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 text-[11px] sm:text-sm text-amber-200 bg-slate-800 px-2.5 py-1 rounded-full border border-slate-700">
+            <span>💡</span>
+            <span id="roundSubNote" class="truncate max-w-[230px] sm:max-w-none">지금 나에게 더 필요한 덕목을 선택해 주세요</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-800 h-2.5 sm:h-3 rounded-full overflow-hidden p-0.5 border border-slate-700">
+          <div id="tournamentProgressBar" class="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-sky-400 rounded-full transition-all duration-500" style="width: 6.25%;"></div>
+        </div>
+      </div>
+
+      <!-- Mobile-First Vertical Stack / Desktop Split-Screen VS Arena -->
+      <div class="relative grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-8 items-stretch">
+
+        <!-- LEFT / TOP CANDIDATE (기호 1번) -->
+        <div id="leftCard" role="button" tabindex="0"
+          class="candidate-card cursor-pointer relative bg-white rounded-3xl border-4 border-rose-400 shadow-xl hover:shadow-rose-200/80 p-4 sm:p-7 flex flex-col justify-between overflow-hidden group">
+          <!-- Election Party Top Ribbon -->
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="bg-rose-500 text-white font-dohyeon text-base sm:text-xl px-3 py-0.5 sm:py-1 rounded-xl shadow">
+                기호 1번
+              </span>
+              <span class="text-[11px] sm:text-sm font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 sm:py-1 rounded-full border border-rose-200">
+                따뜻한 공감 캠프
+              </span>
+            </div>
+            <span class="text-[11px] font-bold text-slate-400">터치하여 투표</span>
+          </div>
+
+          <!-- Mobile Horizontal / Desktop Vertical Core Info Layout -->
+          <div class="flex flex-row md:flex-col items-center gap-3 sm:gap-2 my-1">
+            <!-- Tattoo Emblem Illustration -->
+            <div class="shrink-0 flex justify-center items-center">
+              <div id="leftEmblemContainer" class="w-28 h-28 sm:w-48 sm:h-48 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
+                <!-- SVG Injected Here -->
+              </div>
+            </div>
+
+            <!-- Virtue Title, English Name & Concept -->
+            <div class="flex-1 text-left md:text-center min-w-0">
+              <div class="flex flex-wrap items-baseline md:justify-center gap-x-2">
+                <h2 id="leftNameKo" class="font-jua text-3xl sm:text-5xl text-slate-900 tracking-wide">
+                  존중
+                </h2>
+                <p id="leftNameEn" class="font-dohyeon text-xs sm:text-lg text-rose-500 tracking-widest uppercase">
+                  RESPECT
+                </p>
+              </div>
+
+              <!-- Virtue Concept Box -->
+              <div class="bg-rose-50/90 border-2 border-rose-200 rounded-2xl p-2.5 sm:p-4 mt-2 text-left md:text-center">
+                <span class="inline-block text-[10px] sm:text-xs font-black text-rose-600 bg-white px-2 py-0.5 rounded-full border border-rose-200 mb-1">
+                  덕목의 의미
+                </span>
+                <p id="leftDesc" class="text-xs sm:text-lg font-bold text-slate-800 leading-snug break-keep">
+                  나와 다른 존재의 가치와 권리를 인정하고 소중히 대하는 태도
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vote Button -->
+          <button type="button"
+            class="w-full mt-2.5 bg-gradient-to-r from-rose-500 to-pink-500 group-hover:from-rose-600 group-hover:to-pink-600 text-white font-jua text-lg sm:text-2xl py-3 sm:py-3.5 rounded-2xl shadow-md flex items-center justify-center gap-2 transition">
+            <span>⭕ 기호 1번 선택하기</span>
+          </button>
+
+          <!-- Election Stamp Overlay -->
+          <div id="leftStamp" class="hidden absolute inset-0 bg-rose-500/15 backdrop-blur-[1px] flex items-center justify-center pointer-events-none z-20">
+            <div class="election-stamp border-8 border-rose-600 text-rose-600 bg-white/95 px-6 py-3 rounded-3xl shadow-2xl font-dohyeon text-3xl sm:text-5xl tracking-wider">
+              선택 완료!
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER FLOATING VS EMBLEM (Desktop) -->
+        <div class="vs-emblem hidden md:flex absolute left-1/2 top-1/2 z-30 w-20 h-20 lg:w-24 lg:h-24 rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-orange-500 border-4 border-white text-slate-950 font-dohyeon text-3xl lg:text-4xl items-center justify-center shadow-2xl pointer-events-none select-none">
+          VS
+        </div>
+        <!-- Mobile VS Divider -->
+        <div class="flex md:hidden justify-center -my-2 z-30">
+          <div class="w-11 h-11 rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-orange-500 border-4 border-white text-slate-950 font-dohyeon text-lg flex items-center justify-center shadow-md">
+            VS
+          </div>
+        </div>
+
+        <!-- RIGHT / BOTTOM CANDIDATE (기호 2번) -->
+        <div id="rightCard" role="button" tabindex="0"
+          class="candidate-card cursor-pointer relative bg-white rounded-3xl border-4 border-sky-500 shadow-xl hover:shadow-sky-200/80 p-4 sm:p-7 flex flex-col justify-between overflow-hidden group">
+          <!-- Election Party Top Ribbon -->
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="bg-sky-600 text-white font-dohyeon text-base sm:text-xl px-3 py-0.5 sm:py-1 rounded-xl shadow">
+                기호 2번
+              </span>
+              <span class="text-[11px] sm:text-sm font-bold text-sky-700 bg-sky-50 px-2.5 py-0.5 sm:py-1 rounded-full border border-sky-200">
+                단단한 성장 캠프
+              </span>
+            </div>
+            <span class="text-[11px] font-bold text-slate-400">터치하여 투표</span>
+          </div>
+
+          <!-- Mobile Horizontal / Desktop Vertical Core Info Layout -->
+          <div class="flex flex-row md:flex-col items-center gap-3 sm:gap-2 my-1">
+            <!-- Tattoo Emblem Illustration -->
+            <div class="shrink-0 flex justify-center items-center">
+              <div id="rightEmblemContainer" class="w-28 h-28 sm:w-48 sm:h-48 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
+                <!-- SVG Injected Here -->
+              </div>
+            </div>
+
+            <!-- Virtue Title, English Name & Concept -->
+            <div class="flex-1 text-left md:text-center min-w-0">
+              <div class="flex flex-wrap items-baseline md:justify-center gap-x-2">
+                <h2 id="rightNameKo" class="font-jua text-3xl sm:text-5xl text-slate-900 tracking-wide">
+                  배려
+                </h2>
+                <p id="rightNameEn" class="font-dohyeon text-xs sm:text-lg text-sky-600 tracking-widest uppercase">
+                  CARING
+                </p>
+              </div>
+
+              <!-- Virtue Concept Box -->
+              <div class="bg-sky-50/90 border-2 border-sky-200 rounded-2xl p-2.5 sm:p-4 mt-2 text-left md:text-center">
+                <span class="inline-block text-[10px] sm:text-xs font-black text-sky-700 bg-white px-2 py-0.5 rounded-full border border-sky-200 mb-1">
+                  덕목의 의미
+                </span>
+                <p id="rightDesc" class="text-xs sm:text-lg font-bold text-slate-800 leading-snug break-keep">
+                  상대방의 입장과 마음을 헤아려 먼저 돕고 보살피는 따뜻한 마음
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vote Button -->
+          <button type="button"
+            class="w-full mt-2.5 bg-gradient-to-r from-sky-500 to-blue-600 group-hover:from-sky-600 group-hover:to-blue-700 text-white font-jua text-lg sm:text-2xl py-3 sm:py-3.5 rounded-2xl shadow-md flex items-center justify-center gap-2 transition">
+            <span>⭕ 기호 2번 선택하기</span>
+          </button>
+
+          <!-- Election Stamp Overlay -->
+          <div id="rightStamp" class="hidden absolute inset-0 bg-sky-500/15 backdrop-blur-[1px] flex items-center justify-center pointer-events-none z-20">
+            <div class="election-stamp border-8 border-sky-600 text-sky-600 bg-white/95 px-6 py-3 rounded-3xl shadow-2xl font-dohyeon text-3xl sm:text-5xl tracking-wider">
+              선택 완료!
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== 3. GRAND FINALE RESULT SCREEN ==================== -->
+    <section id="resultScreen" class="hidden w-full max-w-5xl mx-auto">
+      <div class="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl border-4 border-amber-300 p-4 sm:p-9 relative overflow-hidden">
+
+        <!-- Broadcast Breaking News Ribbon -->
+        <div class="text-center mb-5 sm:mb-6">
+          <div class="inline-flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-rose-600 via-amber-500 to-rose-600 text-white font-dohyeon text-xs sm:text-xl px-4 sm:px-5 py-1.5 rounded-full shadow-lg mb-2.5">
+            <span>🎊</span>
+            <span>[경축] 2026 나의 핵심 인성 덕목 최종 당선 확정!</span>
+            <span>🎊</span>
+          </div>
+          <h1 class="font-jua text-2xl sm:text-5xl text-slate-900 break-keep">
+            당신의 마음을 밝히는 빛, <span id="winnerHighlightTitle" class="text-rose-600 underline decoration-amber-400 decoration-4 underline-offset-4">공감</span>
+          </h1>
+        </div>
+
+        <!-- Dual Glowing Emblems Showcase: Seongnam RAS Emblem + Selected Virtue Tattoo Emblem -->
+        <div class="relative grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-center justify-items-center bg-gradient-to-br from-amber-50/90 via-pink-50/80 to-sky-50/90 rounded-3xl p-4 sm:p-8 border-2 border-amber-200/80 mb-6 overflow-hidden">
+
+          <!-- Rotating Sunburst Light Rays Behind Emblems -->
+          <div class="sunburst-rays absolute inset-0 flex items-center justify-center pointer-events-none opacity-35">
+            <svg viewBox="0 0 400 400" class="w-[520px] h-[520px]">
+              <g fill="#fbbf24">
+                <polygon points="200,200 185,0 215,0" />
+                <polygon points="200,200 285,18 310,35" />
+                <polygon points="200,200 365,90 382,115" />
+                <polygon points="200,200 400,185 400,215" />
+                <polygon points="200,200 382,285 365,310" />
+                <polygon points="200,200 310,365 285,382" />
+                <polygon points="200,200 215,400 185,400" />
+                <polygon points="200,200 115,382 90,365" />
+                <polygon points="200,200 35,310 18,285" />
+                <polygon points="200,200 0,215 0,185" />
+                <polygon points="200,200 18,115 35,90" />
+                <polygon points="200,200 90,35 115,18" />
+              </g>
+            </svg>
+          </div>
+
+          <!-- Left: Glowing Seongnam RAS Emblem -->
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <span class="bg-slate-900 text-amber-300 font-dohyeon text-xs sm:text-sm px-3.5 py-1 rounded-full shadow mb-2">
+              ✨ RAS 인성 ON 성남교육 공식 엠블렘 ✨
+            </span>
+            <div id="seongnamRasEmblemBox" class="w-48 h-48 sm:w-64 sm:h-64 float-bob drop-shadow-[0_0_25px_rgba(251,191,36,0.85)]">
+              <!-- Bespoke Seongnam RAS Emblem SVG Injected Here -->
+            </div>
+            <p class="text-xs sm:text-sm font-bold text-slate-600 mt-1 break-keep">
+              성남의 상징 까치 · 철쭉 · 은행잎과 함께 빛나는 인성
+            </p>
+          </div>
+
+          <!-- Right: Glowing Winning Virtue Tattoo Emblem -->
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <span class="bg-rose-600 text-white font-dohyeon text-xs sm:text-sm px-3.5 py-1 rounded-full shadow mb-2">
+              🏆 나의 최종 선택 인성 타투 🏆
+            </span>
+            <div id="winnerEmblemBox" class="w-44 h-44 sm:w-60 sm:h-60 float-bob drop-shadow-[0_0_25px_rgba(244,63,94,0.65)]" style="animation-delay: 0.4s;">
+              <!-- Winning Virtue SVG Injected Here -->
+            </div>
+            <div class="mt-2">
+              <span id="winnerBadgeKo" class="font-jua text-2xl sm:text-3xl text-slate-900">공감</span>
+              <span id="winnerBadgeEn" class="font-dohyeon text-sm sm:text-base text-rose-600 ml-1.5">EMPATHY</span>
+            </div>
+          </div>
+
+          <!-- Sparkling Stars Overlay -->
+          <span class="sparkle-star absolute top-4 left-6 text-2xl">✨</span>
+          <span class="sparkle-star absolute top-8 right-8 text-3xl" style="animation-delay: 0.5s;">🌟</span>
+          <span class="sparkle-star absolute bottom-6 left-10 text-2xl" style="animation-delay: 0.9s;">💫</span>
+          <span class="sparkle-star absolute bottom-5 right-6 text-2xl" style="animation-delay: 1.2s;">✨</span>
+        </div>
+
+        <!-- Psychology-Based Personalized Interpretation Card -->
+        <div class="bg-white border-4 border-pink-300 rounded-3xl p-4 sm:p-8 shadow-lg mb-6 relative">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="bg-pink-500 text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full">
+              🧠 심리학 기반 마음 처방전
+            </span>
+            <span class="text-xs sm:text-sm text-slate-500 font-bold">SEL+RAS 마음 성찰 리포트</span>
+          </div>
+
+          <!-- Complete, Grammatically Verified Custom Headline Sentence -->
+          <p id="psychHeadline" class="font-jua text-lg sm:text-2xl md:text-3xl text-slate-900 leading-relaxed mb-4 bg-amber-50/90 border-l-8 border-amber-400 p-3.5 sm:p-4 rounded-r-2xl break-keep">
+            <!-- Populated with exact grammatically vetted Korean sentence -->
+          </p>
+
+          <!-- Detailed Psychological Explanation -->
+          <div id="psychDetail" class="text-sm sm:text-lg text-slate-700 leading-relaxed space-y-3 break-keep">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Encouraging Finale Banner: "걱정 말아요, 그대 / Be Happy" -->
+        <div class="bg-gradient-to-r from-rose-100 via-amber-100 to-sky-100 border-4 border-white rounded-3xl p-5 sm:p-8 text-center shadow-xl mb-6 relative overflow-hidden">
+          <div class="flex justify-center gap-3 text-2xl sm:text-3xl mb-1.5">
+            <span>🌸</span><span>🐦</span><span>🍂</span>
+          </div>
+          <p class="font-jua text-3xl sm:text-5xl text-slate-900 tracking-wide mb-1.5">
+            “걱정 말아요, 그대”
+          </p>
+          <p class="font-gaegu text-3xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-amber-600 to-sky-600">
+            ✨ Be Happy ✨
+          </p>
+          <p class="text-xs sm:text-sm text-slate-600 mt-2.5 font-medium break-keep">
+            오늘 선택한 인성 덕목 타투와 보석스티커 거울로 당신만의 빛을 반짝여 보세요!
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
+          <button id="toggleHistoryBtn" type="button"
+            class="bg-slate-800 hover:bg-slate-700 text-white font-jua text-base sm:text-xl px-6 py-3.5 rounded-full shadow-md transition flex items-center justify-center gap-2">
+            <span>📜 나의 경선 선택 여정 보기</span>
+          </button>
+          <button id="playAgainBtn" type="button"
+            class="bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-jua text-base sm:text-xl px-7 py-3.5 rounded-full shadow-lg transition flex items-center justify-center gap-2">
+            <span>🔄 다시 월드컵 진행하기</span>
+          </button>
+        </div>
+
+        <!-- Collapsible Tournament History Log -->
+        <div id="historyPanel" class="hidden mt-6 bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 sm:p-6">
+          <h3 class="font-jua text-lg sm:text-xl text-slate-800 mb-3">🗳️ 라운드별 나의 선택 기록</h3>
+          <div id="historyList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM LIVE ELECTION TICKER -->
+  <footer class="fixed bottom-0 inset-x-0 z-40 bg-slate-950 text-white border-t-2 border-amber-400 py-1.5 sm:py-2 overflow-hidden">
+    <div class="flex items-center">
+      <div class="bg-amber-400 text-slate-950 font-dohyeon text-[11px] sm:text-sm px-2.5 sm:px-3 py-0.5 rounded-r-full shrink-0 z-10 shadow">
+        📢 실시간 속보
+      </div>
+      <div class="overflow-hidden flex-1">
+        <div class="ticker-track text-[11px] sm:text-sm text-slate-200 font-medium">
+          <span class="mx-5">🌸 [SEL+RAS ON 성남교육] 17가지 핵심 인성 덕목 대통령 경선 생방송이 진행 중입니다.</span>
+          <span class="mx-5">🐦 성남의 상징 까치·철쭉·은행잎이 응원하는 나의 마음 찾기 프로젝트에 참여해 보세요!</span>
+          <span class="mx-5">✨ 열일곱 가지 덕목 모두가 한 번씩은 공정하게 비교되는 특별 대진표가 적용되었습니다.</span>
+          <span class="mx-5">💖 최종 당선 덕목을 확인한 뒤, 하트 메모지에 선택한 이유를 적고 인성 타투와 보석거울 체험에 참여해 보세요!</span>
+          <span class="mx-5">🌸 [SEL+RAS ON 성남교육] 17가지 핵심 인성 덕목 대통령 경선 생방송이 진행 중입니다.</span>
+          <span class="mx-5">🐦 성남의 상징 까치·철쭉·은행잎이 응원하는 나의 마음 찾기 프로젝트에 참여해 보세요!</span>
+          <span class="mx-5">✨ 열일곱 가지 덕목 모두가 한 번씩은 공정하게 비교되는 특별 대진표가 적용되었습니다.</span>
+          <span class="mx-5">💖 최종 당선 덕목을 확인한 뒤, 하트 메모지에 선택한 이유를 적고 인성 타투와 보석거울 체험에 참여해 보세요!</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * =========================================================================
+     * 1. 17 CHARACTER VIRTUES DATA + KOREAN TEACHER-VETTED PSYCHOLOGY COPY
+     * =========================================================================
+     */
+    const VIRTUES = [
+      {
+        id: 'respect',
+        ko: '존중',
+        en: 'RESPECT',
+        desc: '나와 다른 존재의 가치와 권리를 인정하고 소중히 대하는 태도',
+        headlineSentence: '‘존중’ 덕목을 선택하신 당신은 사람과 사람 사이의 고유한 경계와 존엄성을 소중히 여기는 깊이 있고 품격 있는 멋진 사람입니다.',
+        psychAnalysis: '심리학에서 존중은 자기결정성 이론의 핵심인 ‘관계성’과 건강한 심리적 경계를 지탱하는 힘입니다. 지금 이 덕목을 선택한 당신은 타인을 내 기준에 맞추려 하기보다 있는 그대로 바라볼 줄 아는 성숙한 자아를 지녔으며, 동시에 나 자신 역시 소중히 대접받을 자격이 있음을 아는 단단한 내면의 소유자입니다.',
+        accentColor: '#f43f5e',
+        bgTint: '#ffe4e6'
+      },
+      {
+        id: 'caring',
+        ko: '배려',
+        en: 'CARING',
+        desc: '상대방의 입장과 마음을 헤아려 먼저 돕고 보살피는 따뜻한 마음',
+        headlineSentence: '‘배려’ 덕목을 선택하신 당신은 곁에 있는 이의 작은 필요까지 살피는 온기를 소중히 여기는 따스하고 세심한 멋진 사람입니다.',
+        psychAnalysis: '발달심리학과 친사회적 행동 연구에 따르면, 진정한 배려는 타인의 정서적 신호를 민감하게 포착하는 정서적 조율 능력에서 비롯됩니다. 당신은 주변 사람들의 표정과 분위기 변화를 잘 읽어내는 섬세한 감수성을 지녔으며, 당신의 다정한 손길은 공동체 전체에 심리적 안전감을 불어넣는 귀한 에너지가 됩니다.',
+        accentColor: '#ec4899',
+        bgTint: '#fce7f3'
+      },
+      {
+        id: 'responsibility',
+        ko: '책임',
+        en: 'RESPONSIBILITY',
+        desc: '내가 맡은 일과 선택의 결과를 끝까지 감당하고 성실히 해내는 자세',
+        headlineSentence: '‘책임’ 덕목을 선택하신 당신은 스스로의 선택과 약속을 끝까지 지켜내는 신뢰를 소중히 여기는 믿음직하고 주체적인 멋진 사람입니다.',
+        psychAnalysis: '심리학자 줄리언 로터의 ‘내적 통제 소재’ 관점에서, 책임을 중시하는 사람은 삶의 주도권이 외부 환경이 아닌 나 자신에게 있다고 믿습니다. 지금 책임을 선택한 당신은 어떤 상황에서도 회피하지 않고 해결책을 찾아내는 높은 자기효능감과 신뢰감을 갖춘 멋진 리더형 인재입니다.',
+        accentColor: '#2563eb',
+        bgTint: '#dbeafe'
+      },
+      {
+        id: 'honesty',
+        ko: '정직',
+        en: 'HONESTY',
+        desc: '거짓이나 꾸밈없이 진실하고 바르게 행동하는 떳떳한 마음',
+        headlineSentence: '‘정직’ 덕목을 선택하신 당신은 내면의 진실과 행동이 일치하는 투명함을 소중히 여기는 맑고 떳떳한 멋진 사람입니다.',
+        psychAnalysis: '인본주의 심리학자 칼 로저스가 강조한 ‘일치성’은 건강한 자존감의 핵심입니다. 정직을 선택한 당신은 타인의 시선 때문에 자신을 포장하기보다 있는 그대로의 진실함을 지킬 줄 아는 용기 있는 사람이며, 이러한 투명한 태도는 시간이 흐를수록 주변 사람들에게 가장 깊은 믿음을 줍니다.',
+        accentColor: '#0284c7',
+        bgTint: '#e0f2fe'
+      },
+      {
+        id: 'diligence',
+        ko: '성실',
+        en: 'DILIGENCE',
+        desc: '묵묵히 꾸준히 최선을 다해 자기 역할을 해내는 태도',
+        headlineSentence: '‘성실’ 덕목을 선택하신 당신은 작은 노력이 모여 큰 성장을 이루는 꾸준함을 소중히 여기는 우직하고 끈기 있는 멋진 사람입니다.',
+        psychAnalysis: '긍정심리학의 ‘그릿(열정과 끈기)’ 이론은 재능보다 꾸준한 지속력이 삶의 성취와 행복을 결정한다고 말합니다. 성실을 택한 당신은 당장 눈에 띄는 보상이 없더라도 묵묵히 자기 자리를 지키며 한 걸음씩 나아가는 내면의 지구력을 지녔습니다. 당신이 쌓아 올린 오늘의 작은 성실함은 반드시 빛나는 결실로 돌아옵니다.',
+        accentColor: '#16a34a',
+        bgTint: '#dcfce7'
+      },
+      {
+        id: 'courage',
+        ko: '용기',
+        en: 'COURAGE',
+        desc: '두려움이나 어려움 앞에서도 옳은 일을 향해 당당히 나아가는 힘',
+        headlineSentence: '‘용기’ 덕목을 선택하신 당신은 불안 속에서도 가치 있는 한 걸음을 내딛는 결단을 소중히 여기는 당당하고 가슴 뜨거운 멋진 사람입니다.',
+        psychAnalysis: '심리학에서 용기란 두려움이 없는 상태가 아니라, 두려움을 느끼면서도 더 중요한 가치를 위해 행동하는 ‘회복적 대처’의 정점입니다. 지금 용기를 선택한 당신은 새로운 도전을 앞두고 있거나 옳은 목소리를 내고 싶은 순간에 서 있을 수 있습니다. 이미 마음속에 그 불씨를 품고 있는 당신은 충분히 해낼 수 있습니다.',
+        accentColor: '#ea580c',
+        bgTint: '#ffedd5'
+      },
+      {
+        id: 'cooperation',
+        ko: '협동',
+        en: 'COOPERATION',
+        desc: '공동의 목표를 이루기 위해 서로 힘을 합치고 조화롭게 일하는 태도',
+        headlineSentence: '‘협동’ 덕목을 선택하신 당신은 혼자보다 함께일 때 더 커지는 시너지와 연대를 소중히 여기는 조화롭고 유연한 멋진 사람입니다.',
+        psychAnalysis: '사회심리학의 상호의존성 이론에 따르면, 협동을 중시하는 사람은 경쟁보다 상생을 통해 더 큰 성취감과 소속감을 경험합니다. 당신은 각자의 다름을 강점으로 엮어낼 줄 아는 뛰어난 대인관계 지능을 지녔으며, 함께할 때 모두가 빛나도록 만드는 멋진 조율자입니다.',
+        accentColor: '#0d9488',
+        bgTint: '#ccfbf1'
+      },
+      {
+        id: 'empathy',
+        ko: '공감',
+        en: 'EMPATHY',
+        desc: '타인의 감정과 생각을 마치 내 것처럼 깊이 이해하고 함께 느끼는 능력',
+        headlineSentence: '‘공감’ 덕목을 선택하신 당신은 마음과 마음이 이어지는 깊은 정서적 교감을 소중히 여기는 다정하고 통찰력 있는 멋진 사람입니다.',
+        psychAnalysis: '공감은 인지적 조망 수용과 정서적 공명이 어우러진 고차원적 마음의 능력입니다. 지금 공감을 선택한 당신은 친구나 주변 사람의 말 너머에 숨은 진짜 마음까지 귀 기울일 줄 아는 따뜻한 치유자입니다. 다만 타인의 감정을 깊이 품는 만큼, 오늘만큼은 당신 자신의 마음도 다정하게 안아 주세요.',
+        accentColor: '#e11d48',
+        bgTint: '#ffe4e6'
+      },
+      {
+        id: 'autonomy',
+        ko: '자율',
+        en: 'AUTONOMY',
+        desc: '외부의 강요가 아닌 스스로 세운 원칙과 판단에 따라 행동하는 능력',
+        headlineSentence: '‘자율’ 덕목을 선택하신 당신은 내 삶의 방향타를 스스로 쥐고 나아가는 주체성을 소중히 여기는 자유롭고 독립적인 멋진 사람입니다.',
+        psychAnalysis: '자기결정성 이론에서 ‘자율성’은 내적 동기와 심리적 안녕감을 높이는 가장 중요한 원동력입니다. 자율을 선택한 당신은 남들이 정해 놓은 답을 무작정 따르기보다 ‘나는 무엇을 원하고 어떤 가치를 지킬 것인가’를 스스로 묻고 결정할 줄 아는 건강한 독립심을 지닌 멋진 사람입니다.',
+        accentColor: '#059669',
+        bgTint: '#d1fae5'
+      },
+      {
+        id: 'resilience',
+        ko: '회복탄력성',
+        en: 'RESILIENCE',
+        desc: '실패나 시련을 겪어도 좌절하지 않고 다시 일어서서 성장하는 마음의 힘',
+        headlineSentence: '‘회복탄력성’ 덕목을 선택하신 당신은 흔들려도 부러지지 않고 다시 피어나는 마음의 근력을 소중히 여기는 단단하고 희망찬 멋진 사람입니다.',
+        psychAnalysis: '긍정심리학에서 회복탄력성은 시련을 성장의 발판으로 재해석하는 ‘인지적 재평가’ 능력을 뜻합니다. 지금 이 덕목을 선택한 당신은 최근 크고 작은 고민이나 도전을 지나며 더 단단해지고자 하는 내면의 힘을 발휘하고 있습니다. 넘어져도 다시 툴툴 털고 일어나는 당신은 이미 눈부시게 성장하고 있습니다.',
+        accentColor: '#d97706',
+        bgTint: '#fef3c7'
+      },
+      {
+        id: 'self_control',
+        ko: '절제',
+        en: 'SELF-CONTROL',
+        desc: '순간의 충동이나 욕구를 스스로 조절하고 상황에 맞게 행동하는 힘',
+        headlineSentence: '‘절제’ 덕목을 선택하신 당신은 감정과 충동의 파도를 다스리는 내면의 평정심을 소중히 여기는 사려 깊고 균형 잡힌 멋진 사람입니다.',
+        psychAnalysis: '심리학의 ‘자기조절’ 이론에 따르면, 순간의 만족을 지연하고 감정을 조율하는 힘은 장기적인 행복과 안정된 인간관계의 핵심 열쇠입니다. 절제를 선택한 당신은 감정에 휩쓸리기보다 한 템포 멈추어 생각할 줄 아는 성숙한 지혜를 갖추었으며, 스스로를 지킬 줄 아는 강인한 사람입니다.',
+        accentColor: '#7c3aed',
+        bgTint: '#ede9fe'
+      },
+      {
+        id: 'justice',
+        ko: '정의',
+        en: 'JUSTICE',
+        desc: '누구에게나 공정하고 올바른 기준을 적용하며 부당함을 바로잡으려는 태도',
+        headlineSentence: '‘정의’ 덕목을 선택하신 당신은 편견 없는 공정함과 모두가 존중받는 올바른 기준을 소중히 여기는 공정하고 올곧은 멋진 사람입니다.',
+        psychAnalysis: '도덕발달심리학자 콜버그가 제시한 보편적 윤리 원리처럼, 정의를 소중히 여기는 사람은 자신과 친한 사람에게만 유리한 기준이 아니라 모두에게 공평한 규칙을 지향합니다. 당신은 불합리함 앞에서도 양심의 나침반을 잃지 않는 맑고 강직한 성품을 지녔으며, 공동체의 신뢰를 세우는 든든한 기둥입니다.',
+        accentColor: '#0369a1',
+        bgTint: '#e0f2fe'
+      },
+      {
+        id: 'gratitude',
+        ko: '감사',
+        en: 'GRATITUDE',
+        desc: '일상 속 크고 작은 도움과 호의에 고마움을 느끼고 표현하는 마음',
+        headlineSentence: '‘감사’ 덕목을 선택하신 당신은 평범한 일상 속에서 행복의 조각을 발견하는 시선을 소중히 여기는 긍정적이고 마음 풍요로운 멋진 사람입니다.',
+        psychAnalysis: '긍정심리학자 로버트 에먼스의 연구에 따르면, 감사는 뇌의 긍정 신경전달물질 분비를 촉진해 스트레스 회복력과 행복지수를 가장 빠르게 높이는 정서입니다. 감사를 선택한 당신은 당연하게 지나칠 수 있는 작은 호의도 따뜻하게 기억하고 표현할 줄 아는, 마음의 부자입니다.',
+        accentColor: '#db2777',
+        bgTint: '#fce7f3'
+      },
+      {
+        id: 'inclusiveness',
+        ko: '포용',
+        en: 'INCLUSIVENESS',
+        desc: '나와 다른 생각, 문화, 배경을 가진 사람들을 편견 없이 넓게 받아들이는 태도',
+        headlineSentence: '‘포용’ 덕목을 선택하신 당신은 다름을 틀림이 아닌 풍요로움으로 안아 주는 너른 품을 소중히 여기는 너그럽고 개방적인 멋진 사람입니다.',
+        psychAnalysis: '사회심리학의 ‘내집단 편향’을 넘어서는 포용력은 높은 정서적 안정감과 심리적 여유에서 나옵니다. 포용을 선택한 당신은 나와 다른 색깔을 가진 친구도 자연스럽게 우리 울타리 안으로 초대할 줄 아는 큰 나무 같은 사람이며, 당신 곁에서는 누구나 안심하고 자기다움을 펼칠 수 있습니다.',
+        accentColor: '#15803d',
+        bgTint: '#dcfce7'
+      },
+      {
+        id: 'citizenship',
+        ko: '시민성',
+        en: 'CITIZENSHIP',
+        desc: '공동체의 구성원으로서 규칙을 지키고 사회 문제에 관심을 가지며 참여하는 자세',
+        headlineSentence: '‘시민성’ 덕목을 선택하신 당신은 ‘나’를 넘어 ‘우리’의 더 나은 내일을 가꾸는 연대 의식을 소중히 여기는 성숙하고 공동체적인 멋진 사람입니다.',
+        psychAnalysis: '아들러 개인심리학에서 말하는 ‘공동체 감각’은 성숙한 인간의 가장 중요한 척도입니다. 시민성을 선택한 당신은 내가 속한 교실과 사회가 더 따뜻하고 안전해지기를 바라며 기꺼이 작은 실천을 보태는, 미래를 밝히는 깨어 있는 민주시민입니다.',
+        accentColor: '#ca8a04',
+        bgTint: '#fef9c3'
+      },
+      {
+        id: 'communication',
+        ko: '소통',
+        en: 'COMMUNICATION',
+        desc: '자신의 생각과 감정을 바르게 표현하고 상대의 이야기를 경청하며 교감하는 과정',
+        headlineSentence: '‘소통’ 덕목을 선택하신 당신은 진심을 담아 말하고 온마음으로 귀 기울이는 마음의 다리를 소중히 여기는 진솔하고 공감 능력 있는 멋진 사람입니다.',
+        psychAnalysis: '비폭력대화 심리학에서는 진정한 소통을 ‘판단 없이 관찰하고 진심으로 연결되는 과정’으로 봅니다. 소통을 선택한 당신은 상대에게 상처를 주지 않으면서도 내 마음을 건강하게 표현하고, 타인의 이야기에 진심으로 귀 기울일 줄 아는 세련된 관계의 예술가입니다.',
+        accentColor: '#9333ea',
+        bgTint: '#f3e8ff'
+      },
+      {
+        id: 'peace',
+        ko: '평화',
+        en: 'PEACE',
+        desc: '갈등이나 폭력 없이 서로 존중하며 조화롭고 안전한 관계를 만들어가는 상태',
+        headlineSentence: '‘평화’ 덕목을 선택하신 당신은 마음의 고요함과 모두가 안전하게 웃을 수 있는 조화를 소중히 여기는 온화하고 평화로운 멋진 사람입니다.',
+        psychAnalysis: '심리학에서 내적 평화와 대인관계의 평화는 ‘정서적 안전기지’가 형성될 때 찾아옵니다. 지금 평화를 선택한 당신은 갈등을 힘으로 누르기보다 대화와 화해로 풀어가길 원하며, 주변 사람들에게 편안한 쉼표와 안정감을 선물하는 평화 메이커입니다.',
+        accentColor: '#0284c7',
+        bgTint: '#e0f2fe'
+      }
+    ];
+
+    /**
+     * =========================================================================
+     * 2. BESPOKE SVG ILLUSTRATIONS FOR EACH VIRTUE TATTOO BADGE & SEONGNAM RAS
+     * =========================================================================
+     */
+    function getVirtueTattooSVG(virtue) {
+      const motifs = {
+        respect: `
+          <!-- Two hands forming a heart -->
+          <circle cx="100" cy="96" r="46" fill="#ffe4e6" />
+          <path d="M100 118 C82 104 72 93 72 82 C72 74 78 68 86 68 C92 68 97 72 100 77 C103 72 108 68 114 68 C122 68 128 74 128 82 C128 93 118 104 100 118 Z" fill="#fb7185" stroke="#1e293b" stroke-width="2.5"/>
+          <path d="M66 112 Q80 128 100 128 Q120 128 134 112" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="82" cy="60" r="3" fill="#fbbf24"/>
+          <circle cx="118" cy="60" r="3" fill="#fbbf24"/>
+        `,
+        caring: `
+          <!-- Warm umbrella sheltering a sprout/heart -->
+          <circle cx="100" cy="96" r="46" fill="#fce7f3" />
+          <path d="M62 94 C62 70 138 70 138 94 Z" fill="#f472b6" stroke="#1e293b" stroke-width="2.5"/>
+          <path d="M100 94 L100 122 C100 128 92 128 92 122" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+          <path d="M116 116 C111 112 108 108 108 104 C108 101 110 99 113 99 C115 99 116 101 116 102 C116 101 118 99 120 99 C123 99 125 101 125 104 C125 108 121 112 116 116 Z" fill="#fb7185" stroke="#1e293b" stroke-width="1.8"/>
+        `,
+        responsibility: `
+          <!-- Shield with golden star emblem -->
+          <circle cx="100" cy="96" r="46" fill="#dbeafe" />
+          <path d="M100 62 L130 74 L130 98 C130 116 117 128 100 134 C83 128 70 116 70 98 L70 74 Z" fill="#60a5fa" stroke="#1e293b" stroke-width="2.5"/>
+          <polygon points="100,78 105,90 118,91 108,100 111,112 100,105 89,112 92,100 82,91 95,90" fill="#fde047" stroke="#1e293b" stroke-width="2"/>
+        `,
+        honesty: `
+          <!-- Sparkling clear diamond/crystal -->
+          <circle cx="100" cy="96" r="46" fill="#e0f2fe" />
+          <polygon points="82,74 118,74 132,92 100,128 68,92" fill="#7dd3fc" stroke="#1e293b" stroke-width="2.5"/>
+          <polyline points="68,92 132,92" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <polyline points="82,74 92,92 100,128 108,92 118,74" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <path d="M100 58 L102 64 L108 66 L102 68 L100 74 L98 68 L92 66 L98 64 Z" fill="#fbbf24"/>
+        `,
+        diligence: `
+          <!-- Growing sprout with clock/sun -->
+          <circle cx="100" cy="96" r="46" fill="#dcfce7" />
+          <path d="M74 124 Q100 116 126 124" fill="#86efac" stroke="#1e293b" stroke-width="2.5"/>
+          <path d="M100 120 L100 88" stroke="#15803d" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M100 96 C84 94 78 82 86 74 C94 68 100 82 100 96 Z" fill="#4ade80" stroke="#1e293b" stroke-width="2.2"/>
+          <path d="M100 90 C116 88 122 76 114 68 C106 62 100 76 100 90 Z" fill="#22c55e" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="124" cy="66" r="7" fill="#fde047" stroke="#1e293b" stroke-width="2"/>
+        `,
+        courage: `
+          <!-- Cute brave lion face with golden mane -->
+          <circle cx="100" cy="96" r="46" fill="#ffedd5" />
+          <circle cx="100" cy="96" r="32" fill="#fb923c" stroke="#1e293b" stroke-width="2.5"/>
+          <circle cx="100" cy="98" r="21" fill="#fde68a" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="92" cy="95" r="2.5" fill="#1e293b"/>
+          <circle cx="108" cy="95" r="2.5" fill="#1e293b"/>
+          <polygon points="97,101 103,101 100,105" fill="#1e293b"/>
+          <path d="M94 109 Q100 113 106 109" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+        `,
+        cooperation: `
+          <!-- Two cute frogs paddling together on a lilypad -->
+          <circle cx="100" cy="96" r="46" fill="#ccfbf1" />
+          <ellipse cx="100" cy="116" rx="36" ry="11" fill="#4ade80" stroke="#1e293b" stroke-width="2.2"/>
+          <!-- Frog 1 -->
+          <circle cx="86" cy="98" r="12" fill="#86efac" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="82" cy="87" r="4" fill="#86efac" stroke="#1e293b" stroke-width="1.8"/>
+          <circle cx="90" cy="87" r="4" fill="#86efac" stroke="#1e293b" stroke-width="1.8"/>
+          <circle cx="82" cy="87" r="1.5" fill="#1e293b"/>
+          <circle cx="90" cy="87" r="1.5" fill="#1e293b"/>
+          <!-- Frog 2 -->
+          <circle cx="114" cy="98" r="12" fill="#86efac" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="110" cy="87" r="4" fill="#86efac" stroke="#1e293b" stroke-width="1.8"/>
+          <circle cx="118" cy="87" r="4" fill="#86efac" stroke="#1e293b" stroke-width="1.8"/>
+          <circle cx="110" cy="87" r="1.5" fill="#1e293b"/>
+          <circle cx="118" cy="87" r="1.5" fill="#1e293b"/>
+        `,
+        empathy: `
+          <!-- Warm brown bear hugging a little yellow bird -->
+          <circle cx="100" cy="96" r="46" fill="#ffe4e6" />
+          <circle cx="82" cy="74" r="8" fill="#92400e" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="118" cy="74" r="8" fill="#92400e" stroke="#1e293b" stroke-width="2"/>
+          <ellipse cx="100" cy="100" rx="26" ry="28" fill="#b45309" stroke="#1e293b" stroke-width="2.5"/>
+          <circle cx="91" cy="86" r="2.2" fill="#1e293b"/>
+          <circle cx="109" cy="86" r="2.2" fill="#1e293b"/>
+          <ellipse cx="100" cy="93" rx="7" ry="5" fill="#fde68a"/>
+          <circle cx="100" cy="91" r="2.2" fill="#1e293b"/>
+          <!-- Little yellow bird -->
+          <circle cx="102" cy="110" r="8" fill="#fde047" stroke="#1e293b" stroke-width="2"/>
+          <polygon points="109,109 114,111 109,113" fill="#f97316"/>
+        `,
+        autonomy: `
+          <!-- Soaring eagle & compass -->
+          <circle cx="100" cy="96" r="46" fill="#d1fae5" />
+          <path d="M66 86 Q84 72 100 86 Q116 72 134 86 Q116 94 100 92 Q84 94 66 86 Z" fill="#92400e" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="100" cy="112" r="15" fill="#fef3c7" stroke="#1e293b" stroke-width="2.2"/>
+          <polygon points="100,101 104,112 100,123 96,112" fill="#ef4444" stroke="#1e293b" stroke-width="1.2"/>
+        `,
+        resilience: `
+          <!-- Cute squirrel holding an acorn & bouncing heart -->
+          <circle cx="100" cy="96" r="46" fill="#fef3c7" />
+          <path d="M116 116 C134 114 138 86 120 78 C108 74 106 90 112 100" fill="#ea580c" stroke="#1e293b" stroke-width="2.2"/>
+          <ellipse cx="96" cy="104" rx="16" ry="20" fill="#f97316" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="94" cy="84" r="12" fill="#f97316" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="90" cy="82" r="2" fill="#1e293b"/>
+          <ellipse cx="86" cy="104" rx="6" ry="8" fill="#fde68a" stroke="#1e293b" stroke-width="1.8"/>
+        `,
+        self_control: `
+          <!-- Wise cute owl perched calmly -->
+          <circle cx="100" cy="96" r="46" fill="#ede9fe" />
+          <ellipse cx="100" cy="100" rx="22" ry="26" fill="#a78bfa" stroke="#1e293b" stroke-width="2.5"/>
+          <circle cx="92" cy="90" r="7" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="108" cy="90" r="7" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="92" cy="90" r="2.5" fill="#1e293b"/>
+          <circle cx="108" cy="90" r="2.5" fill="#1e293b"/>
+          <polygon points="97,96 103,96 100,102" fill="#fbbf24" stroke="#1e293b" stroke-width="1.5"/>
+        `,
+        justice: `
+          <!-- Tiger with balanced golden scales -->
+          <circle cx="100" cy="96" r="46" fill="#e0f2fe" />
+          <line x1="72" y1="82" x2="128" y2="82" stroke="#1e293b" stroke-width="2.5"/>
+          <path d="M66 96 Q72 104 78 96 Z" fill="#fde047" stroke="#1e293b" stroke-width="1.8"/>
+          <path d="M122 96 Q128 104 134 96 Z" fill="#fde047" stroke="#1e293b" stroke-width="1.8"/>
+          <circle cx="100" cy="102" r="18" fill="#fb923c" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="94" cy="99" r="2" fill="#1e293b"/>
+          <circle cx="106" cy="99" r="2" fill="#1e293b"/>
+          <path d="M95 107 Q100 111 105 107" fill="none" stroke="#1e293b" stroke-width="2"/>
+        `,
+        gratitude: `
+          <!-- Cute bunny holding a dandelion puff -->
+          <circle cx="100" cy="96" r="46" fill="#fce7f3" />
+          <ellipse cx="90" cy="72" rx="4" ry="13" fill="#fbcfe8" stroke="#1e293b" stroke-width="2"/>
+          <ellipse cx="100" cy="72" rx="4" ry="13" fill="#fbcfe8" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="95" cy="92" r="14" fill="#fff1f2" stroke="#1e293b" stroke-width="2.2"/>
+          <ellipse cx="95" cy="112" rx="15" ry="14" fill="#fff1f2" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="91" cy="90" r="2" fill="#1e293b"/>
+          <line x1="114" y1="120" x2="118" y2="88" stroke="#15803d" stroke-width="2.2"/>
+          <circle cx="118" cy="85" r="8" fill="#fef08a" stroke="#1e293b" stroke-width="1.8" stroke-dasharray="2,2"/>
+        `,
+        inclusiveness: `
+          <!-- Big lush tree sheltering birds -->
+          <circle cx="100" cy="96" r="46" fill="#dcfce7" />
+          <rect x="94" y="102" width="12" height="24" fill="#92400e" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="100" cy="86" r="26" fill="#4ade80" stroke="#1e293b" stroke-width="2.5"/>
+          <circle cx="88" cy="84" r="4" fill="#fb7185"/>
+          <circle cx="110" cy="80" r="4" fill="#60a5fa"/>
+          <circle cx="100" cy="94" r="4" fill="#fde047"/>
+        `,
+        citizenship: `
+          <!-- Cute meerkat holding a glowing lantern -->
+          <circle cx="100" cy="96" r="46" fill="#fef9c3" />
+          <ellipse cx="94" cy="104" rx="12" ry="22" fill="#d97706" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="94" cy="78" r="11" fill="#f59e0b" stroke="#1e293b" stroke-width="2.2"/>
+          <circle cx="90" cy="76" r="2" fill="#1e293b"/>
+          <circle cx="98" cy="76" r="2" fill="#1e293b"/>
+          <rect x="112" y="88" width="12" height="16" rx="3" fill="#fde047" stroke="#1e293b" stroke-width="2"/>
+        `,
+        communication: `
+          <!-- Pink & Blue dolphins leaping over waves -->
+          <circle cx="100" cy="96" r="46" fill="#f3e8ff" />
+          <path d="M72 104 Q76 76 94 84 Q86 96 86 108 Z" fill="#f472b6" stroke="#1e293b" stroke-width="2"/>
+          <path d="M128 104 Q124 76 106 84 Q114 96 114 108 Z" fill="#38bdf8" stroke="#1e293b" stroke-width="2"/>
+          <path d="M64 114 Q82 106 100 114 Q118 122 136 114" fill="none" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/>
+        `,
+        peace: `
+          <!-- White dove carrying a green olive branch -->
+          <circle cx="100" cy="96" r="46" fill="#e0f2fe" />
+          <path d="M74 102 Q92 78 118 88 Q108 112 82 114 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+          <path d="M88 92 Q78 68 98 76" fill="#f8fafc" stroke="#1e293b" stroke-width="2.2"/>
+          <path d="M116 88 L130 82" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="124" cy="80" rx="4" ry="2" fill="#4ade80"/>
+          <ellipse cx="128" cy="86" rx="4" ry="2" fill="#4ade80"/>
+        `
+      };
+
+      const innerArt = motifs[virtue.id] || motifs.respect;
+      const uid = virtue.id + '_' + Math.floor(Math.random() * 100000);
+
+      return `
+        <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+          <defs>
+            <path id="arch_${uid}" d="M 36,96 A 64,64 0 1,1 164,96" />
+          </defs>
+          <!-- White Die-Cut Sticker Outer Border -->
+          <circle cx="100" cy="98" r="84" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+          <circle cx="100" cy="98" r="76" fill="#ffffff" stroke="#1e293b" stroke-width="3.5" />
+          <circle cx="100" cy="98" r="56" fill="${virtue.bgTint}" stroke="#1e293b" stroke-width="2.5" />
+
+          <!-- Top Arched English Text -->
+          <text font-family="'Do Hyeon', sans-serif" font-size="14" font-weight="bold" fill="#1e293b" letter-spacing="1.5">
+            <textPath href="#arch_${uid}" startOffset="50%" text-anchor="middle">${virtue.en}</textPath>
+          </text>
+
+          <!-- Center Character / Symbol Illustration -->
+          ${innerArt}
+
+          <!-- Bottom Ribbon Banner -->
+          <path d="M 42,146 L 158,146 L 150,168 L 50,168 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2.8" stroke-linejoin="round" />
+          <text x="100" y="162" text-anchor="middle" font-family="'Jua', sans-serif" font-size="16" fill="#1e293b">${virtue.ko}</text>
+
+          <!-- Sub-ribbon RAS-SEONGNAM -->
+          <rect x="58" y="168" width="84" height="15" rx="7" fill="#1e293b" />
+          <text x="100" y="179" text-anchor="middle" font-family="'Do Hyeon', sans-serif" font-size="9.5" fill="#fde047" letter-spacing="1">RAS-SEONGNAM</text>
+        </svg>
+      `;
+    }
+
+    /**
+     * Bespoke SVG for the Iconic Seongnam RAS Emblem (Wings, Vines, Azaleas, Ginkgo Leaves, Two Magpies, Banner)
+     */
+    function getSeongnamRASEmblemSVG() {
+      return `
+        <svg viewBox="0 0 260 250" class="w-full h-full">
+          <!-- Outer White Sticker Outline -->
+          <circle cx="130" cy="122" r="112" fill="#ffffff" stroke="#fbbf24" stroke-width="4" />
+
+          <!-- Decorative Top Vines & Golden Ginkgo Leaves -->
+          <path d="M55 48 Q95 25 130 45 Q165 25 205 48" fill="none" stroke="#15803d" stroke-width="3.5" stroke-linecap="round" />
+          <!-- Left Ginkgo Leaf -->
+          <path d="M56 48 C42 44 38 58 48 64 C54 68 58 58 56 48 Z" fill="#fde047" stroke="#1e293b" stroke-width="2"/>
+          <!-- Right Ginkgo Leaf -->
+          <path d="M204 48 C218 44 222 58 212 64 C206 68 202 58 204 48 Z" fill="#fde047" stroke="#1e293b" stroke-width="2"/>
+
+          <!-- Pink Royal Azalea Blossoms (철쭉) -->
+          <g transform="translate(172, 56)">
+            <circle cx="0" cy="-8" r="7" fill="#fb7185" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="8" cy="-2" r="7" fill="#fb7185" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="5" cy="7" r="7" fill="#fb7185" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="-5" cy="7" r="7" fill="#fb7185" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="-8" cy="-2" r="7" fill="#fb7185" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="4" fill="#fde047"/>
+          </g>
+          <g transform="translate(86, 54) scale(0.85)">
+            <circle cx="0" cy="-8" r="7" fill="#f472b6" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="8" cy="-2" r="7" fill="#f472b6" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="5" cy="7" r="7" fill="#f472b6" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="-5" cy="7" r="7" fill="#f472b6" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="-8" cy="-2" r="7" fill="#f472b6" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="4" fill="#fde047"/>
+          </g>
+
+          <!-- Left & Right Stylized Wings -->
+          <path d="M72 95 Q32 68 24 88 Q44 98 68 106 Q34 102 30 116 Q50 116 70 116" fill="#94a3b8" stroke="#1e293b" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M188 95 Q228 68 236 88 Q216 98 192 106 Q226 102 230 116 Q210 116 190 116" fill="#94a3b8" stroke="#1e293b" stroke-width="2.5" stroke-linejoin="round"/>
+
+          <!-- Center Green Wreath Vines -->
+          <circle cx="130" cy="112" r="54" fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="10,6" />
+
+          <!-- Bold Serif Monogram "RAS" -->
+          <text x="130" y="132" text-anchor="middle" font-family="Georgia, serif" font-weight="900" font-size="64" fill="#1e293b" letter-spacing="-2">
+            RAS
+          </text>
+
+          <!-- Cute Pink Heart Accent -->
+          <path d="M130 42 C124 37 120 33 120 29 C120 26 122 24 125 24 C127 24 129 26 130 27 C131 26 133 24 135 24 C138 24 140 26 140 29 C140 33 136 37 130 42 Z" fill="#fb7185" stroke="#1e293b" stroke-width="1.8"/>
+
+          <!-- Two Korean Magpies (까치) Perched Below -->
+          <!-- Left Magpie -->
+          <g transform="translate(76, 162)">
+            <ellipse cx="0" cy="0" rx="14" ry="10" fill="#1e293b" />
+            <ellipse cx="2" cy="2" rx="8" ry="5" fill="#f8fafc" />
+            <circle cx="10" cy="-7" r="7" fill="#1e293b" />
+            <circle cx="12" cy="-8" r="1.5" fill="#ffffff" />
+            <polygon points="16,-8 22,-6 16,-4" fill="#64748b" />
+            <line x1="-10" y1="4" x2="-24" y2="18" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+          </g>
+          <!-- Right Magpie -->
+          <g transform="translate(184, 162) scale(-1, 1)">
+            <ellipse cx="0" cy="0" rx="14" ry="10" fill="#1e293b" />
+            <ellipse cx="2" cy="2" rx="8" ry="5" fill="#f8fafc" />
+            <circle cx="10" cy="-7" r="7" fill="#1e293b" />
+            <circle cx="12" cy="-8" r="1.5" fill="#ffffff" />
+            <polygon points="16,-8 22,-6 16,-4" fill="#64748b" />
+            <line x1="-10" y1="4" x2="-24" y2="18" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+          </g>
+
+          <!-- Bottom Curved Ribbon Banner: RAS 인성 ON 성남교육 -->
+          <path d="M 32,188 Q 130,172 228,188 L 220,214 Q 130,198 40,214 Z" fill="#fef3c7" stroke="#1e293b" stroke-width="3" stroke-linejoin="round" />
+          <text x="130" y="203" text-anchor="middle" font-family="'Jua', sans-serif" font-size="17" fill="#1e293b">
+            RAS 인성 ON 성남교육
+          </text>
+          <rect x="76" y="213" width="108" height="16" rx="8" fill="#1e293b" />
+          <text x="130" y="224" text-anchor="middle" font-family="'Do Hyeon', sans-serif" font-size="10.5" fill="#fde047" letter-spacing="1.2">
+            RAS·SEONGNAM
+          </text>
+        </svg>
+      `;
+    }
+
+    /**
+     * =========================================================================
+     * 3. WEB AUDIO API SYNTHESIZER (SUSPENSE ELECTION BGM + CELEBRATION FANFARE)
+     * =========================================================================
+     */
+    class BroadcastAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.mode = 'none'; // 'suspense' | 'celebration'
+        this.step = 0;
+        this.timerId = null;
+      }
+
+      initContext() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playTone(freq, duration, type = 'triangle', gainVal = 0.08, delay = 0) {
+        if (!this.ctx || !this.isPlaying) return;
+        const now = this.ctx.currentTime + delay;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(gainVal, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.02);
+      }
+
+      playTick(high = false) {
+        if (!this.ctx || !this.isPlaying) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(high ? 1100 : 750, now);
+        gain.gain.setValueAtTime(0.03, now);
+        gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.045);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      }
+
+      startSuspenseBGM() {
+        this.initContext();
+        this.stopLoop();
+        this.isPlaying = true;
+        this.mode = 'suspense';
+        this.step = 0;
+        updateBgmButtonUI(true);
+
+        // Driving news/election countdown pulse (135 BPM eighth notes)
+        const bassPattern = [110, 110, 130.81, 110, 146.83, 146.83, 130.81, 164.81]; // A2, C3, D3, E3
+        const padChords = [220, 261.63, 293.66, 329.63];
+
+        this.timerId = setInterval(() => {
+          if (!this.isPlaying || this.mode !== 'suspense') return;
+          const idx = this.step % 8;
+          this.playTone(bassPattern[idx], 0.18, 'sawtooth', 0.035);
+          this.playTick(idx % 2 === 0);
+
+          if (idx === 0) {
+            const chordNote = padChords[Math.floor(this.step / 8) % padChords.length];
+            this.playTone(chordNote, 0.75, 'triangle', 0.045);
+            this.playTone(chordNote * 1.5, 0.75, 'sine', 0.03);
+          }
+          this.step++;
+        }, 210);
+      }
+
+      playVoteStampSFX() {
+        this.initContext();
+        if (!this.ctx) return;
+        const prev = this.isPlaying;
+        this.isPlaying = true;
+        this.playTone(523.25, 0.12, 'triangle', 0.12, 0);     // C5
+        this.playTone(659.25, 0.18, 'triangle', 0.14, 0.07);  // E5
+        this.playTone(1046.5, 0.25, 'sine', 0.12, 0.14);      // C6
+        this.isPlaying = prev;
+      }
+
+      startCelebrationBGM() {
+        this.initContext();
+        this.stopLoop();
+        this.isPlaying = true;
+        this.mode = 'celebration';
+        this.step = 0;
+        updateBgmButtonUI(true);
+
+        // Immediate celebratory brass/synth fanfare
+        const fanfare = [
+          { f: 523.25, d: 0.18, t: 0.0 },
+          { f: 659.25, d: 0.18, t: 0.15 },
+          { f: 783.99, d: 0.18, t: 0.30 },
+          { f: 1046.5, d: 0.55, t: 0.45 },
+          { f: 783.99, d: 0.20, t: 0.85 },
+          { f: 1046.5, d: 0.75, t: 1.05 }
+        ];
+        fanfare.forEach(n => this.playTone(n.f, n.d, 'triangle', 0.11, n.t));
+
+        // Upbeat, bright happy melody loop (C Major joyful pop)
+        const happyMelody = [
+          523.25, 659.25, 783.99, 659.25,
+          880.00, 783.99, 659.25, 783.99,
+          587.33, 698.46, 880.00, 783.99,
+          659.25, 587.33, 523.25, 659.25
+        ];
+        const happyBass = [
+          261.63, 329.63, 392.00, 329.63,
+          349.23, 440.00, 349.23, 392.00,
+          293.66, 349.23, 440.00, 392.00,
+          329.63, 392.00, 261.63, 392.00
+        ];
+
+        this.timerId = setInterval(() => {
+          if (!this.isPlaying || this.mode !== 'celebration') return;
+          const idx = this.step % happyMelody.length;
+          this.playTone(happyMelody[idx], 0.24, 'triangle', 0.075);
+          this.playTone(happyBass[idx], 0.22, 'sine', 0.065);
+          if (idx % 2 === 1) {
+            this.playTick(true);
+          }
+          this.step++;
+        }, 230);
+      }
+
+      stopLoop() {
+        if (this.timerId) {
+          clearInterval(this.timerId);
+          this.timerId = null;
+        }
+      }
+
+      toggle() {
+        if (this.isPlaying) {
+          this.isPlaying = false;
+          this.stopLoop();
+          updateBgmButtonUI(false);
+        } else {
+          if (this.mode === 'celebration') {
+            this.startCelebrationBGM();
+          } else {
+            this.startSuspenseBGM();
+          }
+        }
+      }
+    }
+
+    const audioEngine = new BroadcastAudioEngine();
+
+    function updateBgmButtonUI(active) {
+      const icon = document.getElementById('bgmIcon');
+      const label = document.getElementById('bgmLabel');
+      if (active) {
+        icon.textContent = '🔊';
+        label.textContent = '소리 켜짐';
+      } else {
+        icon.textContent = '🔇';
+        label.textContent = '음소거';
+      }
+    }
+
+    /**
+     * Automatic Audio Unlocking on Page Load & Very First Mobile Touch/Pointer
+     */
+    let audioUnlockedByUser = false;
+    function ensureAutoAudioStart() {
+      if (audioUnlockedByUser) return;
+      try {
+        audioEngine.initContext();
+        if (audioEngine.ctx && audioEngine.ctx.state === 'running') {
+          audioUnlockedByUser = true;
+          if (!audioEngine.isPlaying) {
+            if (audioEngine.mode === 'celebration') {
+              audioEngine.startCelebrationBGM();
+            } else {
+              audioEngine.startSuspenseBGM();
+            }
+          }
+          removeUnlockListeners();
+        } else if (!audioEngine.isPlaying) {
+          // Queue start so as soon as context resumes, music plays immediately
+          audioEngine.startSuspenseBGM();
+        }
+      } catch (e) {
+        // Ignore until user gesture unlocks AudioContext
+      }
+    }
+
+    function removeUnlockListeners() {
+      ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(evt => {
+        window.removeEventListener(evt, ensureAutoAudioStart, true);
+      });
+    }
+
+    ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(evt => {
+      window.addEventListener(evt, ensureAutoAudioStart, { capture: true, passive: true });
+    });
+
+    /**
+     * =========================================================================
+     * 4. CELEBRATION CANVAS: FIREWORKS + SEONGNAM MAGPIES, AZALEAS, GINKGO LEAVES
+     * =========================================================================
+     */
+    const canvas = document.getElementById('celebrationCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let celebrationActive = false;
+    let fireworkInterval = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function spawnFireworkBurst(x, y) {
+      const colors = ['#fb7185', '#fbbf24', '#38bdf8', '#4ade80', '#c084fc', '#f43f5e'];
+      for (let i = 0; i < 42; i++) {
+        const angle = (Math.PI * 2 * i) / 42 + (Math.random() - 0.5) * 0.2;
+        const speed = 2.5 + Math.random() * 5.5;
+        particles.push({
+          type: 'spark',
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: 3 + Math.random() * 3.5,
+          gravity: 0.08
+        });
+      }
+    }
+
+    function spawnSeongnamSymbol() {
+      const symbolTypes = ['azalea', 'ginkgo', 'magpie', 'confetti'];
+      const chosen = symbolTypes[Math.floor(Math.random() * symbolTypes.length)];
+      particles.push({
+        type: chosen,
+        x: Math.random() * canvas.width,
+        y: -30,
+        vx: (Math.random() - 0.5) * 1.6,
+        vy: 1.4 + Math.random() * 2.1,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.05,
+        scale: 0.75 + Math.random() * 0.55,
+        swayOffset: Math.random() * Math.PI * 2,
+        color: ['#fb7185', '#fde047', '#38bdf8', '#a78bfa'][Math.floor(Math.random() * 4)]
+      });
+    }
+
+    function drawAzalea(ctx, scale) {
+      ctx.scale(scale, scale);
+      ctx.fillStyle = '#fb7185';
+      for (let i = 0; i < 5; i++) {
+        ctx.rotate((Math.PI * 2) / 5);
+        ctx.beginPath();
+        ctx.ellipse(0, -8, 5, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawGinkgo(ctx, scale) {
+      ctx.scale(scale, scale);
+      ctx.fillStyle = '#facc15';
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(0, 10);
+      ctx.lineTo(-12, -4);
+      ctx.quadraticCurveTo(0, -14, 12, -4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawMagpie(ctx, scale) {
+      ctx.scale(scale, scale);
+      // Body
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 11, 7, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      // White belly
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.ellipse(1, 2, 6, 3.5, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      // Head
+      ctx.fillStyle = '#1e293b';
+      ctx.beginPath();
+      ctx.arc(9, -5, 5, 0, Math.PI * 2);
+      ctx.fill();
+      // Tail
+      ctx.beginPath();
+      ctx.moveTo(-9, 2);
+      ctx.lineTo(-20, 8);
+      ctx.lineTo(-18, 11);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function animateCelebration() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (celebrationActive && particles.length < 130 && Math.random() < 0.45) {
+        spawnSeongnamSymbol();
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        ctx.save();
+
+        if (p.type === 'spark') {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.alpha -= 0.016;
+          if (p.alpha <= 0) {
+            particles.splice(i, 1);
+            ctx.restore();
+            continue;
+          }
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          p.swayOffset += 0.04;
+          p.x += p.vx + Math.sin(p.swayOffset) * 0.8;
+          p.y += p.vy;
+          p.rotation += p.rotSpeed;
+
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+
+          if (p.type === 'azalea') {
+            drawAzalea(ctx, p.scale);
+          } else if (p.type === 'ginkgo') {
+            drawGinkgo(ctx, p.scale);
+          } else if (p.type === 'magpie') {
+            drawMagpie(ctx, p.scale);
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-5, -3, 10, 6);
+          }
+
+          if (p.y > canvas.height + 40) {
+            particles.splice(i, 1);
+          }
+        }
+
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animateCelebration);
+    }
+
+    function startCelebrationEffects() {
+      celebrationActive = true;
+      // Launch immediate initial fireworks
+      spawnFireworkBurst(canvas.width * 0.25, canvas.height * 0.3);
+      setTimeout(() => spawnFireworkBurst(canvas.width * 0.75, canvas.height * 0.28), 300);
+      setTimeout(() => spawnFireworkBurst(canvas.width * 0.5, canvas.height * 0.22), 650);
+
+      for (let i = 0; i < 36; i++) {
+        spawnSeongnamSymbol();
+      }
+
+      if (fireworkInterval) clearInterval(fireworkInterval);
+      fireworkInterval = setInterval(() => {
+        if (!celebrationActive) return;
+        const rx = canvas.width * (0.18 + Math.random() * 0.64);
+        const ry = canvas.height * (0.15 + Math.random() * 0.32);
+        spawnFireworkBurst(rx, ry);
+      }, 1700);
+    }
+
+    function stopCelebrationEffects() {
+      celebrationActive = false;
+      particles = [];
+      if (fireworkInterval) {
+        clearInterval(fireworkInterval);
+        fireworkInterval = null;
+      }
+    }
+
+    /**
+     * =========================================================================
+     * 5. FAIR 17-VIRTUE TOURNAMENT BRACKET ENGINE
+     * =========================================================================
+     * Mathematical Fairness Guarantee:
+     * With 17 items, a single-elimination tournament has exactly 16 matches:
+     * - Preliminary Play-in (예선 플레이오프, Match 1): 2 randomly drawn virtues compete; 15 receive a Round-1 bye.
+     *   -> Now 16 virtues remain (1 play-in winner + 15 bye virtues), so EVERY SINGLE ONE of the 17 virtues
+     *      is guaranteed to participate in the bracket!
+     * - Round of 16 (16강전, Matches 2~9): 8 matches -> 8 winners
+     * - Quarterfinals (8강전, Matches 10~13): 4 matches -> 4 winners
+     * - Semifinals (4강전, Matches 14~15): 2 matches -> 2 winners
+     * - Grand Final (대망의 결승전, Match 16): 1 match -> 1 Champion Virtue!
+     */
+    let state = {
+      roundTitle: '',
+      roundNote: '',
+      currentRoundPool: [],
+      nextRoundWinners: [],
+      pairIndex: 0,
+      matchNumber: 1,
+      totalMatches: 16,
+      isTransitioning: false,
+      history: []
+    };
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initTournament() {
+      stopCelebrationEffects();
+      const shuffled = shuffleArray(VIRTUES);
+
+      // First 2 virtues enter Preliminary Play-in (Match 1); remaining 15 advance to Round of 16
+      state = {
+        stage: 'playin',
+        roundTitle: '예선 플레이오프',
+        roundNote: '17개 덕목 전원 출전! 16강 마지막 티켓을 건 첫 대결',
+        currentRoundPool: [shuffled[0], shuffled[1]],
+        nextRoundWinners: shuffled.slice(2), // 15 virtues waiting in Round of 16
+        pairIndex: 0,
+        matchNumber: 1,
+        totalMatches: 16,
+        isTransitioning: false,
+        history: []
+      };
+
+      document.getElementById('introScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('arenaScreen').classList.remove('hidden');
+
+      renderCurrentMatch();
+    }
+
+    function renderCurrentMatch() {
+      const leftVirtue = state.currentRoundPool[state.pairIndex * 2];
+      const rightVirtue = state.currentRoundPool[state.pairIndex * 2 + 1];
+
+      // Update Scoreboard
+      document.getElementById('roundBadge').textContent = state.roundTitle;
+      document.getElementById('roundSubNote').textContent = state.roundNote;
+      document.getElementById('matchCounterText').innerHTML =
+        `제${state.matchNumber}매치 <span class="text-slate-400 text-xs sm:text-lg">/ 총 ${state.totalMatches}매치</span>`;
+
+      const pct = Math.min(100, Math.round((state.matchNumber / state.totalMatches) * 100));
+      document.getElementById('tournamentProgressBar').style.width = `${pct}%`;
+
+      // Reset Stamps
+      document.getElementById('leftStamp').classList.add('hidden');
+      document.getElementById('rightStamp').classList.add('hidden');
+
+      // Populate Left Candidate
+      document.getElementById('leftEmblemContainer').innerHTML = getVirtueTattooSVG(leftVirtue);
+      document.getElementById('leftNameKo').textContent = leftVirtue.ko;
+      document.getElementById('leftNameEn').textContent = leftVirtue.en;
+      document.getElementById('leftDesc').textContent = leftVirtue.desc;
+
+      // Populate Right Candidate
+      document.getElementById('rightEmblemContainer').innerHTML = getVirtueTattooSVG(rightVirtue);
+      document.getElementById('rightNameKo').textContent = rightVirtue.ko;
+      document.getElementById('rightNameEn').textContent = rightVirtue.en;
+      document.getElementById('rightDesc').textContent = rightVirtue.desc;
+
+      state.isTransitioning = false;
+    }
+
+    function handleVote(side) {
+      if (state.isTransitioning) return;
+      state.isTransitioning = true;
+
+      const leftVirtue = state.currentRoundPool[state.pairIndex * 2];
+      const rightVirtue = state.currentRoundPool[state.pairIndex * 2 + 1];
+      const chosen = side === 'left' ? leftVirtue : rightVirtue;
+      const other = side === 'left' ? rightVirtue : leftVirtue;
+
+      // Show broadcast vote stamp & play chime
+      audioEngine.playVoteStampSFX();
+      if (side === 'left') {
+        document.getElementById('leftStamp').classList.remove('hidden');
+      } else {
+        document.getElementById('rightStamp').classList.remove('hidden');
+      }
+
+      // Record match history
+      state.history.push({
+        match: state.matchNumber,
+        round: state.roundTitle,
+        winner: chosen,
+        runnerUp: other
+      });
+
+      state.nextRoundWinners.push(chosen);
+
+      setTimeout(() => {
+        state.pairIndex++;
+        state.matchNumber++;
+
+        // Check if current round is finished
+        if (state.pairIndex * 2 >= state.currentRoundPool.length) {
+          if (state.nextRoundWinners.length === 1) {
+            // GRAND CHAMPION FOUND!
+            showGrandFinale(state.nextRoundWinners[0]);
+            return;
+          }
+
+          // Advance to next round
+          const nextPool = shuffleArray(state.nextRoundWinners);
+          state.currentRoundPool = nextPool;
+          state.nextRoundWinners = [];
+          state.pairIndex = 0;
+
+          if (nextPool.length === 16) {
+            state.roundTitle = '16강 본선';
+            state.roundNote = '열여섯 가지 핵심 덕목의 치열한 본선 라운드입니다';
+          } else if (nextPool.length === 8) {
+            state.roundTitle = '8강 준준결승';
+            state.roundNote = '마음속에 가장 깊이 남는 여덟 가지 가치를 골라 보세요';
+          } else if (nextPool.length === 4) {
+            state.roundTitle = '4강 준결승';
+            state.roundNote = '결승 문턱입니다! 지금 나에게 꼭 필요한 빛은 무엇인가요?';
+          } else if (nextPool.length === 2) {
+            state.roundTitle = '🏆 대망의 결승전';
+            state.roundNote = '최종 당선 덕목을 결정하는 마지막 선택입니다';
+          }
+        }
+
+        renderCurrentMatch();
+      }, 450);
+    }
+
+    function showGrandFinale(winner) {
+      document.getElementById('arenaScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Switch to celebratory upbeat music & launch fireworks + Seongnam symbols
+      audioEngine.startCelebrationBGM();
+      startCelebrationEffects();
+
+      // Populate Winner Title & Emblems
+      document.getElementById('winnerHighlightTitle').textContent = winner.ko;
+      document.getElementById('seongnamRasEmblemBox').innerHTML = getSeongnamRASEmblemSVG();
+      document.getElementById('winnerEmblemBox').innerHTML = getVirtueTattooSVG(winner);
+      document.getElementById('winnerBadgeKo').textContent = winner.ko;
+      document.getElementById('winnerBadgeEn').textContent = winner.en;
+
+      // Populate Korean-Teacher-Vetted Psychology-Based Interpretation
+      document.getElementById('psychHeadline').textContent = winner.headlineSentence;
+
+      document.getElementById('psychDetail').innerHTML = `
+        <p>${winner.psychAnalysis}</p>
+        <p class="text-xs sm:text-base text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-200 leading-relaxed">
+          💡 <strong>부스 체험 연계 안내:</strong> 최종 선정된 <strong>‘${winner.ko}’</strong> 덕목과 선택한 이유를 하트 메모지에 한 줄로 적어 보드에 붙인 뒤, <strong>‘${winner.ko}’ 인성 타투</strong>와 <strong>보석스티커 버튼거울 꾸미기</strong>로 오늘의 빛을 간직해 보세요.
+        </p>
+      `;
+
+      // Populate History Panel
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = state.history.map(item => `
+        <div class="flex items-center justify-between bg-white px-3.5 py-2.5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${item.round}</span>
+            <span class="font-jua text-base text-rose-600">${item.winner.ko}</span>
+            <span class="text-xs text-slate-400">vs ${item.runnerUp.ko}</span>
+          </div>
+          <span class="text-xs font-bold text-emerald-600">✔ 선택</span>
+        </div>
+      `).join('');
+    }
+
+    /**
+     * =========================================================================
+     * 6. INITIALIZATION & EVENT LISTENERS
+     * =========================================================================
+     */
+    window.onload = function () {
+      // Attempt immediate auto-start of suspense BGM on page load
+      ensureAutoAudioStart();
+
+      // Populate 17 virtue preview pills on Intro Screen
+      const strip = document.getElementById('introBadgeStrip');
+      strip.innerHTML = VIRTUES.map(v => `
+        <span class="inline-flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded-full text-xs sm:text-sm font-bold text-slate-700 shadow-sm">
+          <span class="w-2 h-2 rounded-full" style="background-color:${v.accentColor}"></span>
+          ${v.ko}
+        </span>
+      `).join('');
+
+      // Start Animation Loop for Fireworks & Seongnam Symbols
+      animateCelebration();
+
+      // Start Tournament Button
+      document.getElementById('startTournamentBtn').addEventListener('click', () => {
+        audioEngine.startSuspenseBGM();
+        initTournament();
+      });
+
+      // Candidate Cards Click & Keyboard Accessibility
+      const leftCard = document.getElementById('leftCard');
+      const rightCard = document.getElementById('rightCard');
+
+      leftCard.addEventListener('click', () => handleVote('left'));
+      rightCard.addEventListener('click', () => handleVote('right'));
+
+      leftCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVote('left'); }
+      });
+      rightCard.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVote('right'); }
+      });
+
+      // BGM Toggle
+      document.getElementById('bgmToggleBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        audioEngine.toggle();
+      });
+
+      // Restart Buttons
+      const resetToIntro = () => {
+        stopCelebrationEffects();
+        audioEngine.startSuspenseBGM();
+
+        document.getElementById('arenaScreen').classList.add('hidden');
+        document.getElementById('resultScreen').classList.add('hidden');
+        document.getElementById('historyPanel').classList.add('hidden');
+        document.getElementById('introScreen').classList.remove('hidden');
+      };
+
+      document.getElementById('restartTopBtn').addEventListener('click', resetToIntro);
+      document.getElementById('playAgainBtn').addEventListener('click', () => {
+        document.getElementById('historyPanel').classList.add('hidden');
+        audioEngine.startSuspenseBGM();
+        initTournament();
+      });
+
+      // Toggle History Log
+      document.getElementById('toggleHistoryBtn').addEventListener('click', () => {
+        const panel = document.getElementById('historyPanel');
+        panel.classList.toggle('hidden');
+      });
+    };
+  </script>
+</body>
+</html>
